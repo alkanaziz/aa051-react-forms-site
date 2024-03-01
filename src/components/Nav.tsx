@@ -14,7 +14,7 @@ export const Nav = () => {
 					<NavLink to="/employees">Employees</NavLink>
 				</li>
 				<li>
-					<NavLink to="/state-form">About</NavLink>
+					<NavLink to="/state-form">State Form</NavLink>
 				</li>
 			</ul>
 		</nav>

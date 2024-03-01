@@ -64,8 +64,12 @@
       "id": 7
     }
   ],
-
   "members": [
-    
+    {
+      "firstName": "Alkan",
+      "lastName": "Aziz",
+      "age": 35,
+      "id": 1
+    }
   ]
 }

@@ -1,6 +1,8 @@
-import { ChangeEvent, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChangeEvent, FormEvent, useState } from "react";
 import { IFormInfo, initialFormInfo } from "../interfaces";
-import * as config from '../config';
+import * as config from "../config";
+import axios from "axios";
 
 export const PageStateForm = () => {
 	const [formInfo, setFormInfo] = useState<IFormInfo>(initialFormInfo);
@@ -39,9 +41,64 @@ export const PageStateForm = () => {
 		setFormInfo(_setFormInfo);
 	};
 
+	const blankOutForm = () => {
+		const _formInfo = structuredClone(formInfo);
+		const firstName = _formInfo.fields.find(
+			(m) => m.idCode === "firstName"
+		);
+		const lastName = _formInfo.fields.find((m) => m.idCode === "lastName");
+		const age = _formInfo.fields.find((m) => m.idCode === "age");
+		if (firstName && lastName && age) {
+			firstName.value = "";
+			lastName.value = "";
+			age.value = "";
+		}
+		setFormInfo(_formInfo);
+	};
+
+	const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		const member = {
+			firstName: formInfo.fields.find((m) => m.idCode === "firstName")
+				?.value,
+			lastName: formInfo.fields.find((m) => m.idCode === "lastName")
+				?.value,
+			age: Number(formInfo.fields.find((m) => m.idCode === "age")?.value),
+		};
+
+		const headers = {
+			"Access-Control-Allow-Origin": "*",
+			"Content-Type": "application/json",
+		};
+
+		(async () => {
+			try {
+				const response = await axios.post(
+					"http://localhost:3021/members",
+					member,
+					{
+						headers,
+					}
+				);
+				if (response.status === 201) {
+					blankOutForm();
+				} else {
+					console.log(`ERROR: ${response.status}`);
+					alert("Sorry, our site is experiencing difficulties.");
+				}
+			} catch (error: any) {
+				console.log(`ERROR: ${error.message}`);
+				alert("Sorry, our site is experiencing difficulties.");
+			}
+		})();
+
+		console.log(member);
+	};
+
 	return (
 		<section className="flex gap-6">
-			<form>
+			<form onSubmit={handleSubmitForm}>
 				<fieldset className="border border-slate-500 p-4 rounded max-w-[25rem]">
 					<legend>New Member</legend>
 
@@ -99,7 +156,7 @@ export const PageStateForm = () => {
 			</form>
 			<section>
 				{config.debugging && (
-				<pre>{JSON.stringify(formInfo, null, 2)}</pre>
+					<pre>{JSON.stringify(formInfo, null, 2)}</pre>
 				)}
 			</section>
 		</section>
