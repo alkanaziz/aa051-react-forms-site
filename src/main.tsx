@@ -8,7 +8,7 @@ import {
 import "./index.scss";
 import { PageSimpleForm } from "./pages/PageSimpleForm.tsx";
 import { PageEmployees } from "./pages/PageEmployees.tsx";
-import { PageAbout } from "./pages/PageAbout.tsx";
+import { PageStateForm } from "./pages/PageStateForm.tsx";
 import * as config from './config.ts';
 
 const router = createBrowserRouter([
@@ -25,8 +25,8 @@ const router = createBrowserRouter([
 				element: <PageEmployees />,
 			},
 			{
-				path: "about",
-				element: <PageAbout />,
+				path: "state-form",
+				element: <PageStateForm />,
 			},
 			{
 				path: "/",
